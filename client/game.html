@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G's NHL 26 BRAWL - Hockey Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+        }
+
+        /* MAIN MENU STYLES */
+        .main-menu {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        .nhl-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .ice-texture {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a3a52 0%, #0d1f2d 50%, #1a2a3a 100%);
+            opacity: 0.9;
+        }
+
+        .rink-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(0deg, rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .menu-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .top-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        .nhl-logo-area {
+            text-align: center;
+        }
+
+        .nhl-title {
+            font-size: 120px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.2);
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .game-subtitle {
+            font-size: 80px;
+            font-weight: 900;
+            color: #ff006e;
+            text-shadow: 0 4px 8px rgba(255, 0, 110, 0.8), 0 0 30px rgba(255, 0, 110, 0.6);
+            letter-spacing: 6px;
+            animation: fadeIn 1s ease-out 0.2s backwards;
+        }
+
+        .nhl-tagline {
+            font-size: 24px;
+            color: #00d4ff;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-top: 10px;
+        }
+
+        .menu-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .nhl-menu-button {
+            padding: 25px 40px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 3px solid #00d4ff;
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            min-width: 200px;
+        }
+
+        .nhl-menu-button:hover {
+            background: linear-gradient(135deg, #0f3460 0%, #00d4ff 100%);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.6);
+            border-color: #ff006e;
+        }
+
+        .bottom-section {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+
+        .footer-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .footer-btn:hover {
+            background: linear-gradient(135deg, #0f3460 0%, #00d4ff 100%);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+        .quit-btn {
+            border-color: #ff006e;
+            color: #ff006e;
+        }
+
+        .quit-btn:hover {
+            background: linear-gradient(135deg, #3d1f2d 0%, #ff006e 100%);
+        }
+
+        /* GAME SCREEN STYLES */
+        .game-screen {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #0a0a0a;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .game-hidden {
+            display: none;
+        }
+
+        .game-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px;
+            border-bottom: 3px solid #00d4ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .team-info {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .score-display {
+            flex: 1;
+            text-align: center;
+            font-size: 48px;
+            color: #00d4ff;
+            font-weight: 900;
+        }
+
+        .game-container {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(135deg, #1a3a52 0%, #0d1f2d 50%, #1a2a3a 100%);
+            border: 2px solid #00d4ff;
+            margin: 10px;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .game-controls {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 15px;
+            border-top: 2px solid #00d4ff;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .control-btn:hover {
+            background: #00d4ff;
+            color: #000;
+        }
+
+        .control-btn.active {
+            background: #ff006e;
+            color: #fff;
+            border-color: #ff006e;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .nhl-title { font-size: 60px; }
+            .game-subtitle { font-size: 48px; }
+            .button-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- MAIN MENU -->
+    <div id="mainMenu" class="main-menu">
+        <div class="nhl-background">
+            <div class="ice-texture"></div>
+            <div class="rink-lines"></div>
+        </div>
+
+        <div class="menu-content">
+            <div class="top-section">
+                <div class="nhl-logo-area">
+                    <h1 class="nhl-title">G'S NHL 26</h1>
+                    <h2 class="game-subtitle">BRAWL</h2>
+                    <p class="nhl-tagline">NEXT GEN HOCKEY</p>
+                </div>
+            </div>
+
+            <div class="menu-center">
+                <div class="button-grid">
+                    <button class="nhl-menu-button" onclick="startGame('exhibition')">EXHIBITION</button>
+                    <button class="nhl-menu-button" onclick="startGame('season')">SEASON MODE</button>
+                    <button class="nhl-menu-button" onclick="startGame('playoff')">PLAYOFFS</button>
+                    <button class="nhl-menu-button" onclick="startGame('career')">HUT</button>
+                </div>
+            </div>
+
+            <div class="bottom-section">
+                <div class="footer-buttons">
+                    <button class="footer-btn" onclick="alert('Settings coming soon!')">SETTINGS</button>
+                    <button class="footer-btn" onclick="toggleMusic()" id="musicBtn">♫ MUSIC ON</button>
+                    <button class="footer-btn quit-btn" onclick="quitGame()">EXIT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="gameScreen" class="game-screen game-hidden">
+        <div class="game-header">
+            <div class="team-info">
+                <div id="homeTeam" style="color: #00d4ff;">HOME TEAM</div>
+            </div>
+            <div class="score-display">
+                <span id="homeScore">0</span> - <span id="awayScore">0</span>
+            </div>
+            <div class="team-info">
+                <div id="awayTeam" style="color: #ff006e;">AWAY TEAM</div>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+
+        <div class="game-controls">
+            <button class="control-btn" id="upBtn" onmousedown="keyDown('up')" onmouseup="keyUp('up')" ontouchstart="keyDown('up')" ontouchend="keyUp('up')">↑ UP</button>
+            <button class="control-btn" id="downBtn" onmousedown="keyDown('down')" onmouseup="keyUp('down')" ontouchstart="keyDown('down')" ontouchend="keyUp('down')">↓ DOWN</button>
+            <button class="control-btn" id="leftBtn" onmousedown="keyDown('left')" onmouseup="keyUp('left')" ontouchstart="keyDown('left')" ontouchend="keyUp('left')">← LEFT</button>
+            <button class="control-btn" id="rightBtn" onmousedown="keyDown('right')" onmouseup="keyUp('right')" ontouchstart="keyDown('right')" ontouchend="keyUp('right')">→ RIGHT</button>
+            <button class="control-btn" id="shootBtn" onclick="action('shoot')">SHOOT (SPACE)</button>
+            <button class="control-btn" id="passBtn" onclick="action('pass')">PASS (E)</button>
+            <button class="control-btn" id="checkBtn" onclick="action('check')">CHECK (R)</button>
+            <button class="control-btn" onclick="pauseGame()">PAUSE (P)</button>
+            <button class="control-btn quit-btn" onclick="backToMenu()">BACK TO MENU</button>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        const gameState = {
+            mode: 'exhibition',
+            homeScore: 0,
+            awayScore: 0,
+            period: 1,
+            time: 1200,
+            paused: false,
+            keys: {},
+            players: [],
+            puck: { x: 400, y: 300, vx: 0, vy: 0, radius: 5 },
+            playing: false
+        };
+
+        // Hockey Players
+        const nhlPlayers = [
+            { name: 'Connor McDavid', number: 97, speed: 99, shooting: 92 },
+            { name: 'David Pastrnak', number: 88, speed: 91, shooting: 96 },
+            { name: 'Auston Matthews', number: 34, speed: 88, shooting: 96 },
+            { name: 'Nathan MacKinnon', number: 29, speed: 92, shooting: 92 },
+            { name: 'Cale Makar', number: 8, speed: 89, shooting: 88 }
+        ];
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Resize canvas
+        function resizeCanvas() {
+            const container = document.querySelector('.game-container');
+            if (container) {
+                canvas.width = container.clientWidth;
+                canvas.height = container.clientHeight;
+            }
+        }
+
+        // Initialize Game
+        function initGame() {
+            resizeCanvas();
+            gameState.players = [];
+            gameState.homeScore = 0;
+            gameState.awayScore = 0;
+            gameState.period = 1;
+            gameState.time = 1200;
+            gameState.paused = false;
+            gameState.puck = { x: canvas.width / 2, y: canvas.height / 2, vx: 0, vy: 0, radius: 5 };
+
+            // Create home team (3 players)
+            for (let i = 0; i < 3; i++) {
+                gameState.players.push({
+                    x: 100 + i * 50,
+                    y: 150 + i * 100,
+                    vx: 0,
+                    vy: 0,
+                    radius: 12,
+                    team: 'home',
+                    speed: 6,
+                    stamina: 100,
+                    player: nhlPlayers[i]
+                });
+            }
+
+            // Create away team (3 players)
+            for (let i = 0; i < 3; i++) {
+                gameState.players.push({
+                    x: canvas.width - 100 - i * 50,
+                    y: 150 + i * 100,
+                    vx: 0,
+                    vy: 0,
+                    radius: 12,
+                    team: 'away',
+                    speed: 6,
+                    stamina: 100,
+                    player: nhlPlayers[i]
+                });
+            }
+
+            gameState.playing = true;
+            gameLoop();
+        }
+
+        // Draw Rink
+        function drawRink() {
+            // Background
+            ctx.fillStyle = '#1a3a52';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Center line
+            ctx.strokeStyle = '#00d4ff';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 10]);
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Goal lines
+            ctx.strokeStyle = '#ff006e';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(100, 0);
+            ctx.lineTo(100, canvas.height);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(canvas.width - 100, 0);
+            ctx.lineTo(canvas.width - 100, canvas.height);
+            ctx.stroke();
+
+            // Goals
+            ctx.fillStyle = '#ff006e';
+            ctx.globalAlpha = 0.3;
+            ctx.fillRect(0, canvas.height / 2 - 50, 100, 100);
+            ctx.fillRect(canvas.width - 100, canvas.height / 2 - 50, 100, 100);
+            ctx.globalAlpha = 1;
+
+            // Center circle
+            ctx.strokeStyle = '#00d4ff';
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, 50, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        // Draw Players
+        function drawPlayers() {
+            gameState.players.forEach(player => {
+                ctx.fillStyle = player.team === 'home' ? '#00d4ff' : '#ff006e';
+                ctx.beginPath();
+                ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Player number
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 10px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(player.player.number, player.x, player.y);
+
+                // Stamina bar
+                ctx.fillStyle = player.stamina > 50 ? '#00d4ff' : '#ff9800';
+                ctx.fillRect(player.x - 15, player.y - 25, player.stamina / 3.3, 4);
+                ctx.strokeStyle = '#fff';
+                ctx.strokeRect(player.x - 15, player.y - 25, 30, 4);
+            });
+        }
+
+        // Draw Puck
+        function drawPuck() {
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(gameState.puck.x, gameState.puck.y, gameState.puck.radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Update Game
+        function update() {
+            if (gameState.paused || !gameState.playing) return;
+
+            // Update players
+            gameState.players.forEach((player, idx) => {
+                // Apply velocity
+                player.x += player.vx;
+                player.y += player.vy;
+
+                // Friction
+                player.vx *= 0.92;
+                player.vy *= 0.92;
+
+                // Boundaries
+                player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, player.x));
+                player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, player.y));
+
+                // Stamina recovery
+                if (Math.abs(player.vx) < 1 && Math.abs(player.vy) < 1) {
+                    player.stamina = Math.min(100, player.stamina + 0.3);
+                } else {
+                    player.stamina = Math.max(0, player.stamina - 0.2);
+                }
+
+                // Puck proximity
+                const dx = gameState.puck.x - player.x;
+                const dy = gameState.puck.y - player.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 30) {
+                    gameState.puck.x = player.x + 20;
+                    gameState.puck.y = player.y;
+                }
+            });
+
+            // Update puck physics
+            gameState.puck.x += gameState.puck.vx;
+            gameState.puck.y += gameState.puck.vy;
+            gameState.puck.vx *= 0.98;
+            gameState.puck.vy *= 0.98;
+
+            // Puck boundaries
+            if (gameState.puck.x < 10 || gameState.puck.x > canvas.width - 10) {
+                gameState.puck.vx *= -0.8;
+                gameState.puck.x = Math.max(10, Math.min(canvas.width - 10, gameState.puck.x));
+            }
+            if (gameState.puck.y < 10 || gameState.puck.y > canvas.height - 10) {
+                gameState.puck.vy *= -0.8;
+                gameState.puck.y = Math.max(10, Math.min(canvas.height - 10, gameState.puck.y));
+            }
+
+            // Goal detection
+            if (gameState.puck.x < 50 && gameState.puck.y > canvas.height / 2 - 50 && gameState.puck.y < canvas.height / 2 + 50) {
+                gameState.awayScore++;
+                resetPuck();
+            }
+            if (gameState.puck.x > canvas.width - 50 && gameState.puck.y > canvas.height / 2 - 50 && gameState.puck.y < canvas.height / 2 + 50) {
+                gameState.homeScore++;
+                resetPuck();
+            }
+
+            // Update UI
+            document.getElementById('homeScore').textContent = gameState.homeScore;
+            document.getElementById('awayScore').textContent = gameState.awayScore;
+
+            // Game timer
+            gameState.time--;
+            if (gameState.time <= 0) {
+                gameState.period++;
+                gameState.time = 1200;
+                if (gameState.period > 3) {
+                    endGame();
+                    return;
+                }
+            }
+        }
+
+        // Game Loop
+        function gameLoop() {
+            if (!gameState.playing) return;
+
+            drawRink();
+            drawPlayers();
+            drawPuck();
+            update();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Player Controls
+        function keyDown(direction) {
+            const homePlayer = gameState.players[0];
+            if (!homePlayer || gameState.paused) return;
+
+            if (homePlayer.stamina <= 0) return;
+
+            switch(direction) {
+                case 'up':
+                    homePlayer.vy = Math.max(homePlayer.vy - 1.5, -homePlayer.speed);
+                    break;
+                case 'down':
+                    homePlayer.vy = Math.min(homePlayer.vy + 1.5, homePlayer.speed);
+                    break;
+                case 'left':
+                    homePlayer.vx = Math.max(homePlayer.vx - 1.5, -homePlayer.speed);
+                    break;
+                case 'right':
+                    homePlayer.vx = Math.min(homePlayer.vx + 1.5, homePlayer.speed);
+                    break;
+            }
+        }
+
+        function keyUp(direction) {
+            const homePlayer = gameState.players[0];
+            if (!homePlayer) return;
+
+            switch(direction) {
+                case 'up':
+                case 'down':
+                    homePlayer.vy *= 0.8;
+                    break;
+                case 'left':
+                case 'right':
+                    homePlayer.vx *= 0.8;
+                    break;
+            }
+        }
+
+        // Actions
+        function action(type) {
+            const homePlayer = gameState.players[0];
+            if (!homePlayer || gameState.paused) return;
+
+            switch(type) {
+                case 'shoot':
+                    const dx = canvas.width - homePlayer.x;
+                    const dy = canvas.height / 2 - homePlayer.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    gameState.puck.vx = (dx / dist) * 12;
+                    gameState.puck.vy = (dy / dist) * 12;
+                    break;
+                case 'pass':
+                    gameState.puck.vx = (canvas.width / 2 - gameState.puck.x) * 0.1;
+                    gameState.puck.vy = (canvas.height / 2 - gameState.puck.y) * 0.1;
+                    break;
+                case 'check':
+                    homePlayer.vx *= 1.5;
+                    homePlayer.vy *= 1.5;
+                    break;
+            }
+        }
+
+        // Reset Puck
+        function resetPuck() {
+            gameState.puck.x = canvas.width / 2;
+            gameState.puck.y = canvas.height / 2;
+            gameState.puck.vx = 0;
+            gameState.puck.vy = 0;
+        }
+
+        // Pause Game
+        function pauseGame() {
+            gameState.paused = !gameState.paused;
+            if (gameState.paused) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
+            } else {
+                gameLoop();
+            }
+        }
+
+        // End Game
+        function endGame() {
+            gameState.playing = false;
+            const winner = gameState.homeScore > gameState.awayScore ? 'HOME TEAM' : gameState.homeScore < gameState.awayScore ? 'AWAY TEAM' : 'TIE';
+            setTimeout(() => {
+                alert(`GAME OVER!\n\n${gameState.homeScore} - ${gameState.awayScore}\n\nWinner: ${winner}`);
+                backToMenu();
+            }, 500);
+        }
+
+        // UI Functions
+        function startGame(mode) {
+            gameState.mode = mode;
+            document.getElementById('mainMenu').classList.add('game-hidden');
+            document.getElementById('gameScreen').classList.remove('game-hidden');
+            document.getElementById('homeTeam').textContent = nhlPlayers[0].name + ' (Home)';
+            document.getElementById('awayTeam').textContent = nhlPlayers[1].name + ' (Away)';
+            setTimeout(initGame, 100);
+        }
+
+        function backToMenu() {
+            gameState.playing = false;
+            document.getElementById('gameScreen').classList.add('game-hidden');
+            document.getElementById('mainMenu').classList.remove('game-hidden');
+        }
+
+        function toggleMusic() {
+            const btn = document.getElementById('musicBtn');
+            btn.textContent = btn.textContent.includes('ON') ? '♪ MUSIC OFF' : '♫ MUSIC ON';
+        }
+
+        function quitGame() {
+            if (confirm('Exit G\'s NHL 26 BRAWL?')) {
+                alert('Thanks for playing! 🏒');
+                window.close();
+            }
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') keyDown('up');
+            if (e.key === 'ArrowDown') keyDown('down');
+            if (e.key === 'ArrowLeft') keyDown('left');
+            if (e.key === 'ArrowRight') keyDown('right');
+            if (e.key === ' ') action('shoot');
+            if (e.key === 'e' || e.key === 'E') action('pass');
+            if (e.key === 'r' || e.key === 'R') action('check');
+            if (e.key === 'p' || e.key === 'P') pauseGame();
+            if (e.key === 'Escape') backToMenu();
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') keyUp(e.key === 'ArrowUp' ? 'up' : 'down');
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') keyUp(e.key === 'ArrowLeft' ? 'left' : 'right');
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', resizeCanvas);
+    </script>
+</body>
+</html>
