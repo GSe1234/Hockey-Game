@@ -1,0 +1,361 @@
+/* ===============================================
+   NHL 26 STYLE - Main Menu Styling
+   =============================================== */
+
+.main-menu {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: #0a0a0a;
+  font-family: 'Arial', sans-serif;
+  color: #fff;
+}
+
+/* Ice Rink Background */
+.nhl-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.ice-texture {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1a3a52 0%, #0d1f2d 50%, #1a2a3a 100%);
+  opacity: 0.9;
+}
+
+.rink-lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(0deg, rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Main Content Container */
+.menu-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
+}
+
+/* Top Section */
+.top-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: slideDown 0.8s ease-out;
+}
+
+.nhl-logo-area {
+  text-align: center;
+}
+
+.nhl-title {
+  font-size: 120px;
+  font-weight: 900;
+  margin: 0;
+  color: #fff;
+  text-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(255, 255, 255, 0.2);
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  animation: fadeIn 1s ease-out;
+}
+
+.nhl-tagline {
+  font-size: 24px;
+  color: #00d4ff;
+  font-weight: bold;
+  letter-spacing: 4px;
+  margin-top: 10px;
+  text-transform: uppercase;
+  animation: fadeIn 1s ease-out 0.2s backwards;
+}
+
+/* Center Menu Buttons */
+.menu-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: slideUp 0.8s ease-out 0.2s backwards;
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 500px;
+}
+
+.nhl-menu-button {
+  position: relative;
+  padding: 25px 40px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 3px solid #00d4ff;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 20px rgba(0, 212, 255, 0.3),
+    inset 0 0 20px rgba(0, 212, 255, 0.1);
+  overflow: hidden;
+  min-width: 200px;
+}
+
+.nhl-menu-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.nhl-menu-button:hover::before {
+  left: 100%;
+}
+
+.nhl-menu-button:hover {
+  background: linear-gradient(135deg, #0f3460 0%, #00d4ff 100%);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 
+    0 10px 30px rgba(0, 212, 255, 0.6),
+    inset 0 0 20px rgba(0, 212, 255, 0.2);
+  border-color: #ff006e;
+}
+
+.nhl-menu-button.active {
+  background: linear-gradient(135deg, #00d4ff 0%, #0f3460 100%);
+  border-color: #ff006e;
+  box-shadow: 
+    0 15px 40px rgba(0, 212, 255, 0.8),
+    inset 0 0 30px rgba(255, 0, 110, 0.3);
+}
+
+.button-text {
+  position: relative;
+  z-index: 2;
+  display: block;
+}
+
+.button-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 212, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nhl-menu-button:hover .button-highlight {
+  opacity: 1;
+}
+
+/* Bottom Section */
+.bottom-section {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  animation: slideUp 0.8s ease-out 0.4s backwards;
+}
+
+.footer-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  width: 100%;
+}
+
+.footer-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #00d4ff;
+  color: #00d4ff;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+}
+
+.footer-btn:hover {
+  background: linear-gradient(135deg, #0f3460 0%, #00d4ff 100%);
+  color: #fff;
+  box-shadow: 0 5px 20px rgba(0, 212, 255, 0.5);
+  transform: translateY(-3px);
+}
+
+.quit-btn {
+  border-color: #ff006e;
+  color: #ff006e;
+}
+
+.quit-btn:hover {
+  background: linear-gradient(135deg, #3d1f2d 0%, #ff006e 100%);
+  color: #fff;
+  box-shadow: 0 5px 20px rgba(255, 0, 110, 0.5);
+}
+
+/* NHL Decorations */
+.nhl-decorations {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.scoreboard {
+  position: absolute;
+  opacity: 0.05;
+  font-size: 200px;
+  font-weight: 900;
+}
+
+.left-board {
+  top: 10%;
+  left: 5%;
+  content: '26';
+}
+
+.right-board {
+  bottom: 10%;
+  right: 5%;
+  content: '26';
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .nhl-title {
+    font-size: 80px;
+    letter-spacing: 4px;
+  }
+
+  .nhl-tagline {
+    font-size: 18px;
+  }
+
+  .button-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .nhl-menu-button {
+    min-width: 250px;
+    padding: 20px 30px;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nhl-title {
+    font-size: 60px;
+    letter-spacing: 2px;
+  }
+
+  .nhl-tagline {
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+
+  .button-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-width: 100%;
+  }
+
+  .nhl-menu-button {
+    min-width: 100%;
+    padding: 18px 24px;
+    font-size: 16px;
+  }
+
+  .footer-btn {
+    padding: 10px 18px;
+    font-size: 12px;
+  }
+}
+
+/* Glow effect animation */
+@keyframes nhlGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 10px rgba(0, 212, 255, 0.3),
+      inset 0 0 10px rgba(0, 212, 255, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 20px rgba(0, 212, 255, 0.5),
+      inset 0 0 20px rgba(0, 212, 255, 0.2);
+  }
+}
+
+.nhl-menu-button:not(:hover) {
+  animation: nhlGlow 3s ease-in-out infinite;
+}
